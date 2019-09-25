@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+
+
+
+<script
+  src="http://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+  
+<script>
+
+function avgFirstScr() {
+
+	$.getJSON( "http://localhost:5000/home/avgfirst", function (data) {
+		
+		var len = data[0].length;
+		var dataPoints = new Array(len);
+		var labels = new Array(len);
+		
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = data[0][i].avgScore;   
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			labels[i] = data[0][i].ItemID;
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = Math.abs(dataPoints[i]);
+		}
+		
+		createAvgFirstGraph( dataPoints, labels, len );
+	
+	});
+		
+}
+
+function avgQuizScr() {
+
+	$.getJSON( "http://localhost:5000/home/avgQuiz", function (data) {
+		
+		var len = data[0].length;
+		var dataPoints = new Array(len);
+		var labels = new Array(len);
+		
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = data[0][i].avgScore;   
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			labels[i] = data[0][i].ItemID;
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = Math.abs(dataPoints[i]);
+		}
+		
+		createAvgScoreGraph( dataPoints, labels, len );
+	
+	});
+		
+}
+
+function numAttempts() {
+
+	$.getJSON( "http://localhost:5000/home/attemptLesson/", function (data) {
+		
+		var len = data[0].length;
+		var dataPoints = new Array(len);
+		var labels = new Array(len);
+		
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = data[0][i].Access_Sum;   
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			labels[i] = data[0][i].LessonID;
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = Math.abs(dataPoints[i]);
+		}
+		
+		createAttemptGraph( dataPoints, labels, len );
+	
+	});
+		
+}
+
+
+function numQuizzes() {
+
+	$.getJSON( "http://localhost:5000/home/numquizzes/", function (data) {
+		
+		var len = data[0].length;
+		var dataPoints = new Array(len);
+		var labels = new Array(len);
+		
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = data[0][i].NumOfQuizzes;   
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			labels[i] = data[0][i].Category;
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = Math.abs(dataPoints[i]);
+		}
+		
+		createNumQuizGraph( dataPoints, labels, len );
+	
+	});
+		
+}
+
+function doIncomplete() {
+
+
+
+	$.getJSON( "http://localhost:5000/home/incomplete/", function (data) {
+		
+		var len = data[0].length;
+		var dataPoints = new Array(len);
+		var labels = new Array(len);
+		
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = data[0][i].sum_status;   
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			labels[i] = data[0][i].itemid;
+		}
+		
+		for( i = 0; i < len; i++ ) {
+			dataPoints[i] = Math.abs(dataPoints[i]);
+		}
+		
+		createIncGraph( dataPoints, labels, len );
+	
+	});
+		
+}
+
+function createAvgFirstGraph( dataPoints, labels, len ) {
+	
+	var chartData = [];
+	
+	for( i = 0; i < len; i++ ) {
+		chartData.push({ y: dataPoints[i], label: labels[i] });
+	}
+	
+	
+	
+	var chart = new CanvasJS.Chart("chartContainer", {
+
+		animationEnabled: true,
+		theme: "light2", // "light1", "light2", "dark1", "dark2"
+		title:{
+			text: "Top 10 Lowest Quiz Averages on the First Attempt"
+		},
+		axisY: {
+			title: "Average Score"
+		},
+		data:  [{        
+		type: "column",  
+		showInLegend: true, 
+		legendMarkerColor: "grey",
+		legendText: "",
+		dataPoints: chartData
+		}]
+	});
+
+	
+	chart.render();
+
+}
+
+function createAvgScoreGraph( dataPoints, labels, len ) {
+	
+	var chartData = [];
+	
+	for( i = 0; i < len; i++ ) {
+		chartData.push({ y: dataPoints[i], label: labels[i] });
+	}
+	
+	
+	
+	var chart = new CanvasJS.Chart("chartContainer", {
+
+		animationEnabled: true,
+		theme: "light2", // "light1", "light2", "dark1", "dark2"
+		title:{
+			text: "Top 10 Lowest Quiz Averages"
+		},
+		axisY: {
+			title: "Average Score"
+		},
+		data:  [{        
+		type: "column",  
+		showInLegend: true, 
+		legendMarkerColor: "grey",
+		legendText: "",
+		dataPoints: chartData
+		}]
+	});
+
+	
+	chart.render();
+
+}
+
+function createAttemptGraph( dataPoints, labels, len ) {
+	
+	var chartData = [];
+	
+	for( i = 0; i < len; i++ ) {
+		chartData.push({ y: dataPoints[i], label: labels[i] });
+	}
+	
+	
+	
+	var chart = new CanvasJS.Chart("chartContainer", {
+
+		animationEnabled: true,
+		theme: "light2", // "light1", "light2", "dark1", "dark2"
+		title:{
+			text: "Top 10 Lessons Attempted"
+		},
+		axisY: {
+			title: "Number of Attempts"
+		},
+		data:  [{        
+		type: "column",  
+		showInLegend: true, 
+		legendMarkerColor: "grey",
+		legendText: "",
+		dataPoints: chartData
+		}]
+	});
+
+	
+	chart.render();
+
+}
+
+function createNumQuizGraph( dataPoints, labels, len ) {
+	
+	var chartData = [];
+	
+	for( i = 0; i < len; i++ ) {
+		chartData.push({ y: dataPoints[i], label: labels[i] });
+	}
+	
+	
+	
+	var chart = new CanvasJS.Chart("chartContainer", {
+
+		animationEnabled: true,
+		theme: "light2", // "light1", "light2", "dark1", "dark2"
+		title:{
+			text: "Number of User Created Quizzes"
+		},
+		axisY: {
+			title: "Number of Quizzes"
+		},
+		data:  [{        
+		type: "column",  
+		showInLegend: true, 
+		legendMarkerColor: "grey",
+		legendText: "",
+		dataPoints: chartData
+		}]
+	});
+
+	
+	chart.render();
+
+
+
+}
+	
+function createIncGraph( dataPoints, labels, len ) {
+	
+	
+
+	var chartData = [];
+	
+	for( i = 0; i < len; i++ ) {
+		chartData.push({ y: dataPoints[i], label: labels[i].toString() });
+	}
+	
+	
+	
+	var chart = new CanvasJS.Chart("chartContainer", {
+
+		animationEnabled: true,
+		theme: "light2", // "light1", "light2", "dark1", "dark2"
+		title:{
+			text: "Incomplete Quizzes"
+		},
+		axisY: {
+			title: "Number of Incomplete Attempts"
+		},
+		data:  [{        
+		type: "column",  
+		showInLegend: true, 
+		legendMarkerColor: "grey",
+		legendText: "",
+		dataPoints: chartData
+		}]
+	});
+	
+	
+	chart.render();
+
+
+
+}
+	
+</script>
+
+<html>
+   <head>
+      <title>Title of the document</title>
+      <style>
+         .button {
+         background-color: #1c87c9;
+         border: none;
+         color: white;
+         padding: 20px 34px;
+         text-align: center;
+         text-decoration: none;
+         display: inline-block;
+         font-size: 20px;
+         margin: 4px 2px;
+         cursor: pointer;
+         }
+      </style>
+   </head>
+   <body>
+      <!--a href="incomplete" class="button">Click Here</a> -->
+	  
+		<input id="averagefirst" type="button" value="first average" onclick="avgFirstScr()" />
+	    <input id="usrquiz" type="button" value="user quizzes" onclick="numQuizzes()" />
+	    <input id="lessattmpt" type="button" value="lesson attempts" onclick="numAttempts()" />
+	    <input id="quizavg" type="button" value="quiz average" onclick="avgQuizScr()" />
+		
+		<input id="incomplete" type="button" value="incomplete" onclick="doIncomplete()" />
+		<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+		<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+		<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+	  
+   </body>
+</html>
